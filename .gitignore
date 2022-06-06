@@ -6,4 +6,3 @@ config.ini
 venv
 *.session
 *.session-journal
-config.ini
