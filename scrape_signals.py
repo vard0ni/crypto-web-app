@@ -1,8 +1,11 @@
 from telethon.sync import TelegramClient
 import pandas as pd
 import datetime
-
 import configparser
+from sqlalchemy import create_engine
+from mysql_keys import *
+import cryptography
+
 config = configparser.ConfigParser()
 config.read("config.ini")
 
@@ -26,6 +29,13 @@ for group in groups:
             temp_df = pd.DataFrame(data, index=[1])
             df = pd.concat([df, temp_df])
 
-df['date'] = df['date'].dt.tz_localize(None)
+df['date'] = df['date'].dt.tz_convert(None)
 
-df.to_excel("C:\\Users\\zahar\\Desktop\\crypto-web\\crypto-web-app\\data\\data_{}.xlsx".format(datetime.date.today()), index=False)
+
+engine = create_engine("mysql+pymysql://{user}:{pw}@{host}/{db}".format(host=hostname, db=dbname, user=uname, pw=pwd))
+df.to_sql(con = engine, name = 'signals_test',if_exists='append',index=False)
+
+
+df.to_excel("C:\\Users\\zahar\\Desktop\\crypto-web\\crypto-web-app\\data\\signals_{}.xlsx".format(datetime.date.today()), index=False)
+
+
