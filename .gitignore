@@ -6,3 +6,4 @@ config.ini
 venv
 *.session
 *.session-journal
+mysql_keys.py
